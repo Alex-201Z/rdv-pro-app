@@ -33,7 +33,7 @@ export default function BuyerDetailsPage() {
 
   const [criteriaForm, setCriteriaForm] = useState<BuyerCriteriaFormData>({
     property_type_id: undefined,
-    cities: '',
+    cities: [],
     min_budget: undefined,
     max_budget: undefined,
     min_surface: undefined,
