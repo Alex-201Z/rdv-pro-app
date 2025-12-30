@@ -73,7 +73,7 @@ export default function NewAppointmentPage() {
 
     try {
       setLoading(true);
-      await appointmentsApi.store(submitData);
+      await appointmentsApi.create(submitData);
       toast.success('Rendez-vous créé avec succès');
       router.push('/appointments');
     } catch (error: any) {
