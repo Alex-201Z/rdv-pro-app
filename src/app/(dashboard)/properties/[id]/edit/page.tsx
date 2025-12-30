@@ -526,7 +526,6 @@ export default function EditPropertyPage() {
               value={formData.commission_percentage}
               onChange={handleChange}
               error={errors.commission_percentage}
-              helper="Pourcentage de commission sur le prix de vente"
             />
 
             {calculatedFees > 0 && (
