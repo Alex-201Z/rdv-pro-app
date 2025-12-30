@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, isLoading } = useAuthStore();
+  const { register, isLoading } = useSupabaseAuthStore();
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
