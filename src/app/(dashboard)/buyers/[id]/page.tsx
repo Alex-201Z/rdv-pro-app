@@ -11,7 +11,6 @@ import {
   ArrowLeft,
   Mail,
   Phone,
-  MapPin,
   Target,
   Edit,
   Archive,
@@ -238,16 +237,6 @@ export default function BuyerDetailsPage() {
                   </a>
                 </div>
               </div>
-
-              {buyer.address && (
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-dark-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-dark-400">Adresse</p>
-                    <p className="text-white">{buyer.address}</p>
-                  </div>
-                </div>
-              )}
 
               {buyer.notes && (
                 <div className="pt-4 border-t border-dark-700">
