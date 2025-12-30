@@ -601,7 +601,6 @@ export default function EditPropertyPage() {
               value={formData.registration_date}
               onChange={handleChange}
               error={errors.registration_date}
-              helper="Date et heure d'enregistrement du bien"
             />
 
             <Input
@@ -648,7 +647,6 @@ export default function EditPropertyPage() {
               value={formData.buyer_offer_name}
               onChange={handleChange}
               error={errors.buyer_offer_name}
-              helper="Nom de l'acheteur ayant fait une offre"
             />
 
             <Input
@@ -667,7 +665,6 @@ export default function EditPropertyPage() {
               value={formData.authentic_deed_date}
               onChange={handleChange}
               error={errors.authentic_deed_date}
-              helper="Calculé auto: compromis + 3 mois (modifiable)"
             />
 
             <Input
