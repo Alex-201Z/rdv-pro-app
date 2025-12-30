@@ -262,7 +262,7 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
             </Button>
             <Button
               onClick={handleCancelUpload}
-              variant="outline"
+              variant="secondary"
               disabled={uploading}
             >
               Annuler
