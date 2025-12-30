@@ -140,6 +140,7 @@ export const buyersApi = {
     api.put(`/buyers/${buyerId}/criteria/${criteriaId}`, data),
   deleteCriteria: (buyerId: number, criteriaId: number) =>
     api.delete(`/buyers/${buyerId}/criteria/${criteriaId}`),
+  stats: () => api.get('/buyers/stats'),
 };
 
 // Propriétés
@@ -162,6 +163,7 @@ export const matchesApi = {
   top: () => api.get('/matches/top'),
   updateStatus: (id: number, data: any) => api.put(`/matches/${id}/status`, data),
   recalculate: () => api.post('/matches/recalculate'),
+  stats: () => api.get('/matches/stats'),
 };
 
 // Types de propriétés
