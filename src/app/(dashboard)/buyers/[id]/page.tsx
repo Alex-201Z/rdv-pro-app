@@ -448,56 +448,56 @@ export default function BuyerDetailsPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-sm">
-                      {criteria.min_budget && (
+                      {criteria.budget_min && (
                         <div>
                           <span className="text-dark-400">Budget min:</span>{' '}
-                          <span className="text-white">{criteria.min_budget.toLocaleString()}€</span>
+                          <span className="text-white">{criteria.budget_min.toLocaleString()}€</span>
                         </div>
                       )}
-                      {criteria.max_budget && (
+                      {criteria.budget_max && (
                         <div>
                           <span className="text-dark-400">Budget max:</span>{' '}
-                          <span className="text-white">{criteria.max_budget.toLocaleString()}€</span>
+                          <span className="text-white">{criteria.budget_max.toLocaleString()}€</span>
                         </div>
                       )}
-                      {criteria.min_surface && (
+                      {criteria.surface_min && (
                         <div>
                           <span className="text-dark-400">Surface min:</span>{' '}
-                          <span className="text-white">{criteria.min_surface}m²</span>
+                          <span className="text-white">{criteria.surface_min}m²</span>
                         </div>
                       )}
-                      {criteria.max_surface && (
+                      {criteria.surface_max && (
                         <div>
                           <span className="text-dark-400">Surface max:</span>{' '}
-                          <span className="text-white">{criteria.max_surface}m²</span>
+                          <span className="text-white">{criteria.surface_max}m²</span>
                         </div>
                       )}
-                      {criteria.min_rooms && (
+                      {criteria.rooms_min && (
                         <div>
                           <span className="text-dark-400">Pièces min:</span>{' '}
-                          <span className="text-white">{criteria.min_rooms}</span>
+                          <span className="text-white">{criteria.rooms_min}</span>
                         </div>
                       )}
-                      {criteria.max_rooms && (
+                      {criteria.rooms_max && (
                         <div>
                           <span className="text-dark-400">Pièces max:</span>{' '}
-                          <span className="text-white">{criteria.max_rooms}</span>
+                          <span className="text-white">{criteria.rooms_max}</span>
                         </div>
                       )}
                     </div>
 
-                    {(criteria.has_parking || criteria.has_elevator || criteria.has_terrace || criteria.has_garden) && (
+                    {(criteria.parking_required || criteria.elevator_required || criteria.terrace_preferred || criteria.garden_preferred) && (
                       <div className="flex flex-wrap gap-2 mt-3">
-                        {criteria.has_parking && (
+                        {criteria.parking_required && (
                           <Badge className="bg-blue-500/20 text-blue-400">Parking</Badge>
                         )}
-                        {criteria.has_elevator && (
+                        {criteria.elevator_required && (
                           <Badge className="bg-blue-500/20 text-blue-400">Ascenseur</Badge>
                         )}
-                        {criteria.has_terrace && (
+                        {criteria.terrace_preferred && (
                           <Badge className="bg-green-500/20 text-green-400">Terrasse</Badge>
                         )}
-                        {criteria.has_garden && (
+                        {criteria.garden_preferred && (
                           <Badge className="bg-green-500/20 text-green-400">Jardin</Badge>
                         )}
                       </div>
