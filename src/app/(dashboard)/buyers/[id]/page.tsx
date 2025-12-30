@@ -34,18 +34,18 @@ export default function BuyerDetailsPage() {
   const [criteriaForm, setCriteriaForm] = useState<BuyerCriteriaFormData>({
     property_type_id: undefined,
     cities: [],
-    min_budget: undefined,
-    max_budget: undefined,
-    min_surface: undefined,
-    max_surface: undefined,
-    min_rooms: undefined,
-    max_rooms: undefined,
-    min_bedrooms: undefined,
-    max_bedrooms: undefined,
-    has_parking: false,
-    has_elevator: false,
-    has_terrace: false,
-    has_garden: false,
+    budget_min: undefined,
+    budget_max: undefined,
+    surface_min: undefined,
+    surface_max: undefined,
+    rooms_min: undefined,
+    rooms_max: undefined,
+    bedrooms_min: undefined,
+    bedrooms_max: undefined,
+    parking_required: false,
+    elevator_required: false,
+    terrace_preferred: false,
+    garden_preferred: false,
   });
 
   useEffect(() => {
@@ -120,19 +120,19 @@ export default function BuyerDetailsPage() {
       setShowCriteriaForm(false);
       setCriteriaForm({
         property_type_id: undefined,
-        cities: '',
-        min_budget: undefined,
-        max_budget: undefined,
-        min_surface: undefined,
-        max_surface: undefined,
-        min_rooms: undefined,
-        max_rooms: undefined,
-        min_bedrooms: undefined,
-        max_bedrooms: undefined,
-        has_parking: false,
-        has_elevator: false,
-        has_terrace: false,
-        has_garden: false,
+        cities: [],
+        budget_min: undefined,
+        budget_max: undefined,
+        surface_min: undefined,
+        surface_max: undefined,
+        rooms_min: undefined,
+        rooms_max: undefined,
+        bedrooms_min: undefined,
+        bedrooms_max: undefined,
+        parking_required: false,
+        elevator_required: false,
+        terrace_preferred: false,
+        garden_preferred: false,
       });
       loadBuyer();
     } catch (error: any) {
@@ -306,17 +306,17 @@ export default function BuyerDetailsPage() {
                     <Input
                       label="Budget minimum (€)"
                       type="number"
-                      name="min_budget"
+                      name="budget_min"
                       placeholder="200000"
-                      value={criteriaForm.min_budget || ''}
+                      value={criteriaForm.budget_min || ''}
                       onChange={handleCriteriaChange}
                     />
                     <Input
                       label="Budget maximum (€)"
                       type="number"
-                      name="max_budget"
+                      name="budget_max"
                       placeholder="500000"
-                      value={criteriaForm.max_budget || ''}
+                      value={criteriaForm.budget_max || ''}
                       onChange={handleCriteriaChange}
                     />
                   </div>
@@ -325,17 +325,17 @@ export default function BuyerDetailsPage() {
                     <Input
                       label="Surface min (m²)"
                       type="number"
-                      name="min_surface"
+                      name="surface_min"
                       placeholder="50"
-                      value={criteriaForm.min_surface || ''}
+                      value={criteriaForm.surface_min || ''}
                       onChange={handleCriteriaChange}
                     />
                     <Input
                       label="Surface max (m²)"
                       type="number"
-                      name="max_surface"
+                      name="surface_max"
                       placeholder="100"
-                      value={criteriaForm.max_surface || ''}
+                      value={criteriaForm.surface_max || ''}
                       onChange={handleCriteriaChange}
                     />
                   </div>
@@ -344,17 +344,17 @@ export default function BuyerDetailsPage() {
                     <Input
                       label="Pièces min"
                       type="number"
-                      name="min_rooms"
+                      name="rooms_min"
                       placeholder="2"
-                      value={criteriaForm.min_rooms || ''}
+                      value={criteriaForm.rooms_min || ''}
                       onChange={handleCriteriaChange}
                     />
                     <Input
                       label="Pièces max"
                       type="number"
-                      name="max_rooms"
+                      name="rooms_max"
                       placeholder="4"
-                      value={criteriaForm.max_rooms || ''}
+                      value={criteriaForm.rooms_max || ''}
                       onChange={handleCriteriaChange}
                     />
                   </div>
@@ -363,17 +363,17 @@ export default function BuyerDetailsPage() {
                     <Input
                       label="Chambres min"
                       type="number"
-                      name="min_bedrooms"
+                      name="bedrooms_min"
                       placeholder="1"
-                      value={criteriaForm.min_bedrooms || ''}
+                      value={criteriaForm.bedrooms_min || ''}
                       onChange={handleCriteriaChange}
                     />
                     <Input
                       label="Chambres max"
                       type="number"
-                      name="max_bedrooms"
+                      name="bedrooms_max"
                       placeholder="3"
-                      value={criteriaForm.max_bedrooms || ''}
+                      value={criteriaForm.bedrooms_max || ''}
                       onChange={handleCriteriaChange}
                     />
                   </div>
@@ -382,8 +382,8 @@ export default function BuyerDetailsPage() {
                     <label className="flex items-center gap-2 text-dark-300 cursor-pointer">
                       <input
                         type="checkbox"
-                        name="has_parking"
-                        checked={criteriaForm.has_parking}
+                        name="parking_required"
+                        checked={criteriaForm.parking_required}
                         onChange={handleCriteriaChange}
                         className="w-4 h-4 rounded border-dark-700 bg-dark-800 text-primary-500 focus:ring-primary-500"
                       />
@@ -392,8 +392,8 @@ export default function BuyerDetailsPage() {
                     <label className="flex items-center gap-2 text-dark-300 cursor-pointer">
                       <input
                         type="checkbox"
-                        name="has_elevator"
-                        checked={criteriaForm.has_elevator}
+                        name="elevator_required"
+                        checked={criteriaForm.elevator_required}
                         onChange={handleCriteriaChange}
                         className="w-4 h-4 rounded border-dark-700 bg-dark-800 text-primary-500 focus:ring-primary-500"
                       />
@@ -402,8 +402,8 @@ export default function BuyerDetailsPage() {
                     <label className="flex items-center gap-2 text-dark-300 cursor-pointer">
                       <input
                         type="checkbox"
-                        name="has_terrace"
-                        checked={criteriaForm.has_terrace}
+                        name="terrace_preferred"
+                        checked={criteriaForm.terrace_preferred}
                         onChange={handleCriteriaChange}
                         className="w-4 h-4 rounded border-dark-700 bg-dark-800 text-primary-500 focus:ring-primary-500"
                       />
@@ -412,8 +412,8 @@ export default function BuyerDetailsPage() {
                     <label className="flex items-center gap-2 text-dark-300 cursor-pointer">
                       <input
                         type="checkbox"
-                        name="has_garden"
-                        checked={criteriaForm.has_garden}
+                        name="garden_preferred"
+                        checked={criteriaForm.garden_preferred}
                         onChange={handleCriteriaChange}
                         className="w-4 h-4 rounded border-dark-700 bg-dark-800 text-primary-500 focus:ring-primary-500"
                       />
