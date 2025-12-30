@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { buyersApi } from '@/lib/api';
 import { Buyer } from '@/types/real-estate';
 import { Card, Button, Spinner, Badge, Input } from '@/components/ui';
-import { Users, Plus, Search, Mail, Phone, MapPin, Archive, Target } from 'lucide-react';
+import { Users, Plus, Search, Mail, Phone, Archive, Target } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function BuyersPage() {
@@ -150,12 +150,6 @@ export default function BuyersPage() {
                     {buyer.phone}
                   </a>
                 </div>
-                {buyer.address && (
-                  <div className="flex items-start gap-2 text-dark-300">
-                    <MapPin className="w-4 h-4 text-dark-400 mt-0.5" />
-                    <span className="line-clamp-2">{buyer.address}</span>
-                  </div>
-                )}
                 {buyer.criteria && buyer.criteria.length > 0 && (
                   <div className="flex items-center gap-2 text-dark-300">
                     <Target className="w-4 h-4 text-dark-400" />
