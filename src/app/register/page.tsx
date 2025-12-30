@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import { Button, Input, Select, Card } from '@/components/ui';
 import { Home } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -30,17 +30,27 @@ export default function RegisterPage() {
     e.preventDefault();
     setErrors({});
 
+    // Validation du mot de passe
+    if (formData.password !== formData.password_confirmation) {
+      setErrors({ password_confirmation: 'Les mots de passe ne correspondent pas' });
+      return;
+    }
+
     try {
-      await register(formData);
-      toast.success('Inscription réussie !');
-      router.push('/dashboard');
+      // Utiliser Supabase pour l'inscription
+      await register(formData.email, formData.password, {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone,
+        company_name: formData.company_name,
+      });
+
+      toast.success('Inscription réussie ! Vérifiez votre email pour confirmer votre compte.');
+      router.push('/login');
     } catch (error: any) {
-      if (error.response?.data?.errors) {
-        const apiErrors: Record<string, string> = {};
-        Object.entries(error.response.data.errors).forEach(([key, value]) => {
-          apiErrors[key] = (value as string[])[0];
-        });
-        setErrors(apiErrors);
+      console.error('Erreur inscription:', error);
+      if (error.message) {
+        toast.error(error.message);
       } else {
         toast.error('Une erreur est survenue');
       }

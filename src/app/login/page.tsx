@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import { Button, Input, Card } from '@/components/ui';
 import { Home } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -24,12 +24,11 @@ export default function LoginPage() {
       toast.success('Connexion réussie !');
       router.push('/dashboard');
     } catch (error: any) {
-      if (error.response?.data?.errors) {
-        setErrors(error.response.data.errors);
-      } else if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
+      console.error('Erreur connexion:', error);
+      if (error.message) {
+        toast.error(error.message);
       } else {
-        toast.error('Une erreur est survenue');
+        toast.error('Email ou mot de passe incorrect');
       }
     }
   };
