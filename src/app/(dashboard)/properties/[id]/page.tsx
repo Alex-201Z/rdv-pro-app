@@ -29,6 +29,7 @@ import {
   Key,
   ChevronLeft,
   ChevronRight,
+  Star,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
