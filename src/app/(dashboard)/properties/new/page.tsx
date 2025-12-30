@@ -571,7 +571,6 @@ export default function NewPropertyPage() {
               value={formData.authentic_deed_date}
               onChange={handleChange}
               error={errors.authentic_deed_date}
-              helper="Calculé auto: compromis + 3 mois (modifiable)"
             />
 
             <Input
