@@ -46,7 +46,7 @@ export default function RegisterPage() {
         role: 'professional',
       });
 
-      toast.success('Inscription réussie ! Vérifiez votre email pour confirmer votre compte.');
+      toast.success('Inscription réussie ! Vous pouvez maintenant vous connecter.');
       router.push('/login');
     } catch (error: any) {
       console.error('Erreur inscription:', error);
