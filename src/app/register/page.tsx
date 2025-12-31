@@ -43,6 +43,7 @@ export default function RegisterPage() {
         last_name: formData.last_name,
         phone: formData.phone,
         company_name: formData.company_name,
+        role: 'professional',
       });
 
       toast.success('Inscription réussie ! Vérifiez votre email pour confirmer votre compte.');
