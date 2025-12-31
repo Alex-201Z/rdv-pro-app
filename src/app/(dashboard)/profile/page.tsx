@@ -1,25 +1,25 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import { authApi } from '@/lib/api';
 import { Card, Button, Input } from '@/components/ui';
 import { User, Lock, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
-  const { user, updateUser } = useAuthStore();
+  const { user } = useSupabaseAuthStore();
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    first_name: user?.first_name || '',
-    last_name: user?.last_name || '',
-    phone: user?.phone || '',
-    company_name: user?.company_name || '',
-    address: user?.address || '',
-    city: user?.city || '',
-    postal_code: user?.postal_code || '',
-    sms_notifications: user?.sms_notifications ?? true,
-    email_notifications: user?.email_notifications ?? true,
+    first_name: user?.user_metadata?.first_name || '',
+    last_name: user?.user_metadata?.last_name || '',
+    phone: user?.user_metadata?.phone || '',
+    company_name: user?.user_metadata?.company_name || '',
+    address: user?.user_metadata?.address || '',
+    city: user?.user_metadata?.city || '',
+    postal_code: user?.user_metadata?.postal_code || '',
+    sms_notifications: user?.user_metadata?.sms_notifications ?? true,
+    email_notifications: user?.user_metadata?.email_notifications ?? true,
   });
   const [passwords, setPasswords] = useState({
     current_password: '',
@@ -31,11 +31,10 @@ export default function ProfilePage() {
     e.preventDefault();
     try {
       setSaving(true);
-      const response = await authApi.updateProfile(formData);
-      updateUser(response.data.user);
+      // TODO: Implement profile update with Supabase
       toast.success('Profil mis à jour');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur');
+      toast.error(error.message || 'Erreur');
     } finally {
       setSaving(false);
     }
@@ -48,11 +47,12 @@ export default function ProfilePage() {
       return;
     }
     try {
-      await authApi.changePassword(passwords);
+      const { updatePassword } = useSupabaseAuthStore.getState();
+      await updatePassword(passwords.password);
       toast.success('Mot de passe modifié');
       setPasswords({ current_password: '', password: '', password_confirmation: '' });
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur');
+      toast.error(error.message || 'Erreur');
     }
   };
 
@@ -75,7 +75,7 @@ export default function ProfilePage() {
           </div>
           <Input label="Email" value={user?.email || ''} disabled />
           <Input label="Téléphone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
-          {user?.role === 'professional' && (
+          {user?.user_metadata?.role === 'professional' && (
             <>
               <Input label="Entreprise" value={formData.company_name} onChange={(e) => setFormData({ ...formData, company_name: e.target.value })} />
               <Input label="Adresse" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />

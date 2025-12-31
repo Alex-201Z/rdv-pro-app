@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import { sellersApi, buyersApi, propertiesApi, matchesApi } from '@/lib/api';
 import { Card, Spinner, Badge } from '@/components/ui';
 import { Home, Users, Building2, Target, TrendingUp, Euro, Calendar } from 'lucide-react';
@@ -31,7 +31,7 @@ interface DashboardStats {
 }
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
+  const { user } = useSupabaseAuthStore();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats>({
     sellers: { total: 0, active: 0 },
@@ -97,7 +97,7 @@ export default function DashboardPage() {
       <div>
         <h1 className="text-3xl font-bold text-white">🏡 Tableau de Bord</h1>
         <p className="text-dark-400 mt-2">
-          Bienvenue {user?.full_name || user?.first_name} - {user?.company_name}
+          Bienvenue {user?.user_metadata?.first_name} {user?.user_metadata?.last_name} - {user?.user_metadata?.company_name}
         </p>
       </div>
 

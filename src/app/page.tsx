@@ -2,18 +2,18 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import { LoadingScreen } from '@/components/ui';
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated, isLoading, fetchUser } = useAuthStore();
+  const { isAuthenticated, isLoading, fetchSession } = useSupabaseAuthStore();
 
   useEffect(() => {
-    fetchUser().then(() => {
+    fetchSession().then(() => {
       // Redirection gérée après le fetch
     });
-  }, [fetchUser]);
+  }, [fetchSession]);
 
   useEffect(() => {
     if (!isLoading) {

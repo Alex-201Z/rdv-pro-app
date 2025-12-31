@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import { cn } from '@/lib/utils';
 import {
   Calendar,
@@ -32,9 +32,9 @@ export default function Layout({ children }: LayoutProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, logout } = useSupabaseAuthStore();
 
-  const isProfessional = user?.role === 'professional';
+  const isProfessional = user?.user_metadata?.role === 'professional';
 
   const professionalLinks = [
     { href: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
@@ -122,12 +122,12 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-dark-800">
               <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center">
                 <span className="text-white font-medium">
-                  {user?.first_name?.[0]}{user?.last_name?.[0]}
+                  {user?.user_metadata?.first_name?.[0]}{user?.user_metadata?.last_name?.[0]}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-white truncate">
-                  {user?.full_name}
+                  {user?.user_metadata?.first_name} {user?.user_metadata?.last_name}
                 </p>
                 <p className="text-xs text-dark-400 truncate">
                   {isProfessional ? 'Professionnel' : 'Client'}
@@ -160,10 +160,10 @@ export default function Layout({ children }: LayoutProps) {
               >
                 <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
                   <span className="text-white text-sm font-medium">
-                    {user?.first_name?.[0]}{user?.last_name?.[0]}
+                    {user?.user_metadata?.first_name?.[0]}{user?.user_metadata?.last_name?.[0]}
                   </span>
                 </div>
-                <span className="hidden sm:block">{user?.first_name}</span>
+                <span className="hidden sm:block">{user?.user_metadata?.first_name}</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
 
