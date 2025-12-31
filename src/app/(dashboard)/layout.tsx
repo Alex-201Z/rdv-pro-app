@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth';
+import { useSupabaseAuthStore } from '@/stores/supabase-auth';
 import Layout from '@/components/Layout';
 import { LoadingScreen } from '@/components/ui';
 
@@ -12,12 +12,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { isAuthenticated, isLoading, fetchUser } = useAuthStore();
+  const { isAuthenticated, isLoading, fetchSession } = useSupabaseAuthStore();
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    fetchUser().then(() => setInitialized(true));
-  }, [fetchUser]);
+    fetchSession().then(() => setInitialized(true));
+  }, [fetchSession]);
 
   useEffect(() => {
     if (initialized && !isLoading && !isAuthenticated) {
