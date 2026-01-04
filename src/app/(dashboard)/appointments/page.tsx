@@ -47,8 +47,20 @@ export default function AppointmentsPage() {
         page: pagination.current_page,
         status: filters.status || undefined,
       });
-      setAppointments(response.data.appointments);
-      setPagination(response.data.pagination);
+      console.log('Appointments API response:', response); // DEBUG
+
+      if (!response || !response.data) {
+        console.error('Invalid response structure:', response);
+        throw new Error('Réponse invalide du serveur');
+      }
+
+      setAppointments(response.data.appointments || []);
+
+      if (response.data.pagination) {
+        setPagination(response.data.pagination);
+      } else {
+        console.warn('Missing pagination in response:', response.data);
+      }
     } catch (error) {
       toast.error('Erreur lors du chargement des rendez-vous');
     } finally {
