@@ -22,7 +22,7 @@ export default function DebugEnvPage() {
   }, []);
 
   if (!envStatus) {
-    return <div className="p-8 text-center">Chargement...</div>;
+    return <div className="p-8 text-center">Chargement de la configuration...</div>;
   }
 
   return (
@@ -31,26 +31,24 @@ export default function DebugEnvPage() {
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
           🔍 Debug Configuration
         </h1>
-        
+
         <div className="space-y-4">
           <div className="flex items-center justify-between p-3 border rounded-lg">
             <span className="font-medium text-gray-700">Supabase URL</span>
-            <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-              envStatus.url 
-                ? 'bg-green-100 text-green-700' 
+            <span className={`px-3 py-1 rounded-full text-sm font-bold ${envStatus.url
+                ? 'bg-green-100 text-green-700'
                 : 'bg-red-100 text-red-700'
-            }`}>
+              }`}>
               {envStatus.url ? 'CONFIGURÉ' : 'MANQUANT'}
             </span>
           </div>
 
           <div className="flex items-center justify-between p-3 border rounded-lg">
             <span className="font-medium text-gray-700">Supabase Anon Key</span>
-            <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-              envStatus.key 
-                ? 'bg-green-100 text-green-700' 
+            <span className={`px-3 py-1 rounded-full text-sm font-bold ${envStatus.key
+                ? 'bg-green-100 text-green-700'
                 : 'bg-red-100 text-red-700'
-            }`}>
+              }`}>
               {envStatus.key ? 'CONFIGURÉ' : 'MANQUANT'}
             </span>
           </div>
@@ -59,7 +57,7 @@ export default function DebugEnvPage() {
         <div className="mt-8 text-sm text-gray-500 bg-blue-50 p-4 rounded-lg">
           <p className="font-semibold mb-2">ℹ️ Note pour le déploiement :</p>
           <p>
-            Si vous voyez <span className="text-red-600 font-bold">MANQUANT</span>, 
+            Si vous voyez <span className="text-red-600 font-bold">MANQUANT</span>,
             vous devez ajouter ces variables dans votre interface Hostinger.
           </p>
         </div>
