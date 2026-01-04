@@ -202,8 +202,16 @@ export const appointmentsApi = {
 // ============================================================================
 export const notificationsApi = {
   list: async (params?: any) => {
-    const { data, error } = await supabase.from('notifications').select('*');
-    return wrapResponse(data, error);
+    const { data, count, error } = await supabase.from('notifications').select('*', { count: 'exact' });
+    return wrapResponse({
+      notifications: data || [],
+      pagination: {
+        current_page: params?.page || 1,
+        last_page: 1,
+        total: count || 0,
+        per_page: 50
+      }
+    }, error);
   },
   stats: async () => {
     const { count, error } = await supabase.from('notifications').select('*', { count: 'exact', head: true });
@@ -233,8 +241,16 @@ export const dashboardApi = {
 // Vendeurs
 export const sellersApi = {
   list: async (params?: any) => {
-    const { data, error } = await supabase.from('sellers').select('*');
-    return wrapResponse(data, error);
+    const { data, count, error } = await supabase.from('sellers').select('*', { count: 'exact' });
+    return wrapResponse({
+      sellers: data || [],
+      pagination: {
+        current_page: params?.page || 1,
+        last_page: 1,
+        total: count || 0,
+        per_page: 50
+      }
+    }, error);
   },
   get: async (id: number) => {
     const { data, error } = await supabase.from('sellers').select('*').eq('id', id).single();
@@ -270,8 +286,16 @@ export const sellersApi = {
 // Acheteurs
 export const buyersApi = {
   list: async (params?: any) => {
-    const { data, error } = await supabase.from('buyers').select('*');
-    return wrapResponse(data, error);
+    const { data, count, error } = await supabase.from('buyers').select('*', { count: 'exact' });
+    return wrapResponse({
+      buyers: data || [],
+      pagination: {
+        current_page: params?.page || 1,
+        last_page: 1,
+        total: count || 0,
+        per_page: 50
+      }
+    }, error);
   },
   get: async (id: number) => {
     const { data, error } = await supabase.from('buyers').select('*').eq('id', id).single();
@@ -317,8 +341,16 @@ export const buyersApi = {
 // Propriétés
 export const propertiesApi = {
   list: async (params?: any) => {
-    const { data, error } = await supabase.from('properties').select('*');
-    return wrapResponse(data, error);
+    const { data, count, error } = await supabase.from('properties').select('*', { count: 'exact' });
+    return wrapResponse({
+      properties: data || [],
+      pagination: {
+        current_page: params?.page || 1,
+        last_page: 1,
+        total: count || 0,
+        per_page: 50
+      }
+    }, error);
   },
   get: async (id: number) => {
     const { data, error } = await supabase.from('properties').select('*').eq('id', id).single();
@@ -361,8 +393,16 @@ export const propertiesApi = {
 // Matches
 export const matchesApi = {
   list: async (params?: any) => {
-    const { data, error } = await supabase.from('matches').select('*');
-    return wrapResponse(data, error);
+    const { data, count, error } = await supabase.from('matches').select('*', { count: 'exact' });
+    return wrapResponse({
+      matches: data || [],
+      pagination: {
+        current_page: params?.page || 1,
+        last_page: 1,
+        total: count || 0,
+        per_page: 50
+      }
+    }, error);
   },
   get: async (id: number) => {
     const { data, error } = await supabase.from('matches').select('*').eq('id', id).single();
@@ -410,10 +450,37 @@ export const propertyTypesApi = {
 
 // Settings
 export const settingsApi = {
-  get: async () => { return wrapResponse({}); },
+  get: async () => {
+    return wrapResponse({
+      settings: {
+        reminder_hours_before: 24,
+        followup_hours_after: 24,
+        relaunch_days_after: 7,
+        min_booking_notice: 2,
+        max_booking_days: 90,
+        allow_cancellation: true,
+        cancellation_notice: 24,
+        confirmation_email_template: "Bonjour {{client_name}},\n\nVotre rendez-vous pour {{service_name}} est confirmé pour le {{date}} à {{time}}.\n\nCordialement,\n{{professional_name}}",
+        reminder_email_template: "Bonjour {{client_name}},\n\nRappel de votre rendez-vous demain à {{time}}.\n\nCordialement.",
+        reminder_sms_template: "Rappel RDV demain {{time}} avec {{professional_name}}.",
+        followup_sms_template: "Merci de votre visite !",
+        relaunch_email_template: "Cela fait longtemps, prenez RDV !"
+      }
+    });
+  },
   update: async (data: any) => { return wrapResponse({}); },
   resetTemplates: async () => { return wrapResponse({}); },
-  templateVariables: async () => { return wrapResponse({}); },
+  templateVariables: async () => {
+    return wrapResponse({
+      variables: {
+        "{{client_name}}": "Nom du client",
+        "{{service_name}}": "Nom du service",
+        "{{date}}": "Date du rendez-vous",
+        "{{time}}": "Heure du rendez-vous",
+        "{{professional_name}}": "Votre nom"
+      }
+    });
+  },
 };
 
 export default {
