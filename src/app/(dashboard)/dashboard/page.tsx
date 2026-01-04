@@ -78,10 +78,20 @@ export default function DashboardPage() {
       });
     } catch (error) {
       console.error('Error loading stats:', error);
+      // Fallback is already handled by individual catches, but this is a double safety
     } finally {
+      if (typeof window !== 'undefined') {
+        console.log('Dashboard stats loaded:', stats);
+      }
       setLoading(false);
     }
   };
+
+  // Safety check for stats object before rendering
+  if (!stats || !stats.sellers || !stats.buyers || !stats.properties || !stats.matches) {
+    console.error('Stats object is malformed:', stats);
+    return <div className="p-8 text-white">Erreur de chargement des statistiques. Veuillez rafraîchir la page.</div>;
+  }
 
   if (loading) {
     return (
