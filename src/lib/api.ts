@@ -111,8 +111,18 @@ export const availabilityApi = {
 // ============================================================================
 export const appointmentsApi = {
   list: async (params?: any) => {
-    const { data, error } = await supabase.from('appointments').select('*');
-    return wrapResponse(data, error);
+    // Mocking pagination as we don't have a real backend value for 'page' without complex logic
+    const { data, count, error } = await supabase.from('appointments').select('*', { count: 'exact' });
+
+    return wrapResponse({
+      appointments: data || [],
+      pagination: {
+        current_page: params?.page || 1,
+        last_page: 1, // Mock
+        total: count || 0,
+        per_page: 50
+      }
+    }, error);
   },
   today: async () => {
     // Mocking 'today' logic
