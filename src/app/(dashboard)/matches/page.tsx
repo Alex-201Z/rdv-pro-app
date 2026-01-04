@@ -23,7 +23,7 @@ export default function MatchesPage() {
     try {
       setLoading(true);
       const response = await matchesApi.list();
-      setMatches(response.data.data || response.data);
+      setMatches(response.data.matches || []);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Erreur lors du chargement des matches');
     } finally {

@@ -21,7 +21,7 @@ export default function BuyersPage() {
     try {
       setLoading(true);
       const response = await buyersApi.list();
-      setBuyers(response.data.data || response.data);
+      setBuyers(response.data.buyers || []);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Erreur lors du chargement des acheteurs');
     } finally {

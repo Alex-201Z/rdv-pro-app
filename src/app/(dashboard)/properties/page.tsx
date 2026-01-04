@@ -21,7 +21,7 @@ export default function PropertiesPage() {
     try {
       setLoading(true);
       const response = await propertiesApi.list();
-      setProperties(response.data.data || response.data);
+      setProperties(response.data.properties || []);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Erreur lors du chargement des propriétés');
     } finally {
@@ -178,28 +178,28 @@ export default function PropertiesPage() {
                     </Link>
                   </div>
 
-              <div className="space-y-2 text-sm mb-4">
-                <div className="flex items-center gap-2 text-dark-300">
-                  <MapPin className="w-4 h-4 text-dark-400" />
-                  <span>{property.city}</span>
-                </div>
-                <div className="flex items-center gap-2 text-dark-300">
-                  <Maximize className="w-4 h-4 text-dark-400" />
-                  <span>{property.surface}m² · {property.rooms} pièces · {property.bedrooms} ch.</span>
-                </div>
-              </div>
+                  <div className="space-y-2 text-sm mb-4">
+                    <div className="flex items-center gap-2 text-dark-300">
+                      <MapPin className="w-4 h-4 text-dark-400" />
+                      <span>{property.city}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-dark-300">
+                      <Maximize className="w-4 h-4 text-dark-400" />
+                      <span>{property.surface}m² · {property.rooms} pièces · {property.bedrooms} ch.</span>
+                    </div>
+                  </div>
 
-              <div className="mb-4">
-                <p className="text-2xl font-bold text-primary-400">
-                  {property.formatted_price}
-                </p>
-              </div>
+                  <div className="mb-4">
+                    <p className="text-2xl font-bold text-primary-400">
+                      {property.formatted_price}
+                    </p>
+                  </div>
 
-              {property.description && (
-                <p className="text-sm text-dark-400 line-clamp-2 mb-4">
-                  {property.description}
-                </p>
-              )}
+                  {property.description && (
+                    <p className="text-sm text-dark-400 line-clamp-2 mb-4">
+                      {property.description}
+                    </p>
+                  )}
 
                   <div className="pt-4 border-t border-dark-700 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-sm text-dark-400">
