@@ -154,7 +154,7 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
 
   const photos = Array.isArray(property.photos) ? property.photos : [];
   // Helper to construct public URL
-  const getImageUrl = (path: string) => storageHelpers.getPublicUrl('property-images', path).publicUrl;
+  const getImageUrl = (path: string) => storageHelpers.getPublicUrl('property-images', path);
 
   return (
     <div className="space-y-4">
