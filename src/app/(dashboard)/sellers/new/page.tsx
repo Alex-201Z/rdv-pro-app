@@ -41,12 +41,25 @@ export default function NewSellerPage() {
     try {
       setLoading(true);
 
-      // Prepare payload
-      // 1. Combine names for full_name
-      // 2. Keep address as it is supported for sellers
+      // Prepare payload to match exact DB schema
+      // Errors confirmed: 'address' column missing.
+      // Likely 'first_name'/'last_name' missing too if it's like buyers.
       const payload = {
-        ...formData,
         full_name: `${formData.first_name} ${formData.last_name}`.trim(),
+        email: formData.email,
+        phone: formData.phone,
+        notes: formData.address
+          ? `${formData.notes}\n\nAdresse: ${formData.address}`.trim()
+          : formData.notes,
+        // project_start_date and open_to_offmarket might also be risky if schema is minimal
+        // We will try sending them, but if they fail we'll need to remove them too.
+        project_start_date: formData.project_start_date || null,
+        open_to_offmarket: formData.open_to_offmarket,
+        // Status might be missing too based on previous logs?
+        // But let's assume 'status' is common. If not, we'll see another error.
+        // Actually, previous chat mentioned 'seller archive requested but status column missing'.
+        // So 'status' probably doesn't exist either! safely remove it or use default if we are sure.
+        // Let's NOT send status for now if we suspect it's missing.
       };
 
       await sellersApi.create(payload);

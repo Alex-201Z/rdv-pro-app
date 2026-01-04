@@ -36,12 +36,8 @@ export default function NewBuyerPage() {
       setLoading(true);
 
       // Prepare payload to match DB schema
-      // 1. Combine names for full_name
-      // 2. Append address to notes since 'address' column likely doesn't exist for buyers
-      // 3. Add default status
+      // Errors confirmed: 'first_name' column missing.
       const payload = {
-        first_name: formData.first_name,
-        last_name: formData.last_name,
         full_name: `${formData.first_name} ${formData.last_name}`.trim(),
         email: formData.email,
         phone: formData.phone,
