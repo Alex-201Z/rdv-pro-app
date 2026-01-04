@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Property } from '@/types/real-estate';
 import { Button, Spinner } from '@/components/ui';
 import { Upload, X, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { storageHelpers } from '@/lib/supabase';
 import api from '@/lib/api';
 
 interface PropertyPhotoUploadProps {
@@ -56,18 +57,32 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
   const handleUpload = async () => {
     if (!selectedFile) return;
 
-    const formData = new FormData();
-    formData.append('photo', selectedFile);
-    formData.append('category', category);
-    if (title) formData.append('title', title);
-    if (description) formData.append('description', description);
-    if (estimatedPrice) formData.append('estimated_price', estimatedPrice);
-
     try {
       setUploading(true);
-      await api.post(`/properties/${property.id}/photos`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+
+      // 1. Upload to Supabase Storage
+      const timestamp = new Date().getTime();
+      const cleanFileName = selectedFile.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const path = `${property.id}/${timestamp}_${cleanFileName}`;
+
+      const { error: uploadError } = await storageHelpers.uploadFile(
+        'property-images', // Assumed bucket name
+        path,
+        selectedFile
+      );
+
+      if (uploadError) throw uploadError;
+
+      // 2. Update Property record in DB
+      const currentPhotos = Array.isArray(property.photos) ? property.photos : [];
+      const newPhotos = [...currentPhotos, path];
+
+      await api.properties.update(property.id, {
+        photos: newPhotos,
+        // If it's the first photo, make it featured
+        ...(newPhotos.length === 1 ? { featured_photo: path } : {})
       });
+
       toast.success('Photo ajoutée avec succès');
       onUpdate();
 
@@ -79,7 +94,8 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
       setDescription('');
       setEstimatedPrice('');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur lors de l\'upload');
+      console.error(error);
+      toast.error(error.message || 'Erreur lors de l\'upload');
     } finally {
       setUploading(false);
     }
@@ -99,13 +115,26 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
 
     try {
       setDeletingPhoto(photoPath);
-      await api.delete(`/properties/${property.id}/photos`, {
-        data: { photo: photoPath },
-      });
+
+      // 1. Remove from Storage
+      await storageHelpers.deleteFile('property-images', [photoPath]);
+
+      // 2. Update DB
+      const currentPhotos = Array.isArray(property.photos) ? property.photos : [];
+      const newPhotos = currentPhotos.filter(p => p !== photoPath);
+
+      const updates: any = { photos: newPhotos };
+      if (property.featured_photo === photoPath) {
+        updates.featured_photo = newPhotos.length > 0 ? newPhotos[0] : null;
+      }
+
+      await api.properties.update(property.id, updates);
+
       toast.success('Photo supprimée');
       onUpdate();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur lors de la suppression');
+      console.error(error);
+      toast.error(error.message || 'Erreur lors de la suppression');
     } finally {
       setDeletingPhoto(null);
     }
@@ -113,18 +142,19 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
 
   const handleSetFeatured = async (photoPath: string) => {
     try {
-      await api.post(`/properties/${property.id}/photos/featured`, {
-        photo: photoPath,
+      await api.properties.update(property.id, {
+        featured_photo: photoPath,
       });
       toast.success('Photo à la une définie');
       onUpdate();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur');
+      toast.error(error.message || 'Erreur');
     }
   };
 
   const photos = Array.isArray(property.photos) ? property.photos : [];
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://127.0.0.1:8000';
+  // Helper to construct public URL
+  const getImageUrl = (path: string) => storageHelpers.getPublicUrl('property-images', path).publicUrl;
 
   return (
     <div className="space-y-4">
@@ -280,7 +310,7 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
               className="relative group bg-dark-800 rounded-lg overflow-hidden aspect-square"
             >
               <img
-                src={`${baseUrl}/storage/${photo}`}
+                src={getImageUrl(photo)}
                 alt={`Photo ${index + 1}`}
                 className="w-full h-full object-cover"
               />
@@ -290,11 +320,10 @@ export default function PropertyPhotoUpload({ property, onUpdate }: PropertyPhot
                 <button
                   onClick={() => handleSetFeatured(photo)}
                   disabled={property.featured_photo === photo}
-                  className={`p-2 rounded-lg transition-colors ${
-                    property.featured_photo === photo
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-dark-700 text-white hover:bg-primary-500'
-                  }`}
+                  className={`p-2 rounded-lg transition-colors ${property.featured_photo === photo
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-dark-700 text-white hover:bg-primary-500'
+                    }`}
                   title="Définir comme photo à la une"
                 >
                   <Star className="w-4 h-4" fill={property.featured_photo === photo ? 'currentColor' : 'none'} />
