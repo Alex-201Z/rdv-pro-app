@@ -34,10 +34,28 @@ export default function NewBuyerPage() {
 
     try {
       setLoading(true);
-      await buyersApi.create(formData);
+
+      // Prepare payload to match DB schema
+      // 1. Combine names for full_name
+      // 2. Append address to notes since 'address' column likely doesn't exist for buyers
+      // 3. Add default status
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        full_name: `${formData.first_name} ${formData.last_name}`.trim(),
+        email: formData.email,
+        phone: formData.phone,
+        notes: formData.address
+          ? `${formData.notes}\n\nAdresse: ${formData.address}`.trim()
+          : formData.notes,
+        status: 'active'
+      };
+
+      await buyersApi.create(payload);
       toast.success('Acheteur créé avec succès');
       router.push('/buyers');
     } catch (error: any) {
+      console.error('Error creating buyer:', error);
       if (error.response?.data?.errors) {
         const apiErrors: Record<string, string> = {};
         Object.entries(error.response.data.errors).forEach(([key, value]) => {
@@ -45,7 +63,7 @@ export default function NewBuyerPage() {
         });
         setErrors(apiErrors);
       } else {
-        toast.error(error.response?.data?.message || 'Une erreur est survenue');
+        toast.error(error.response?.data?.message || 'Une erreur est survenue lors de la création');
       }
     } finally {
       setLoading(false);

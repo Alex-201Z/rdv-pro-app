@@ -40,10 +40,20 @@ export default function NewSellerPage() {
 
     try {
       setLoading(true);
-      await sellersApi.create(formData);
+
+      // Prepare payload
+      // 1. Combine names for full_name
+      // 2. Keep address as it is supported for sellers
+      const payload = {
+        ...formData,
+        full_name: `${formData.first_name} ${formData.last_name}`.trim(),
+      };
+
+      await sellersApi.create(payload);
       toast.success('Vendeur créé avec succès');
       router.push('/sellers');
     } catch (error: any) {
+      console.error('Error creating seller:', error);
       if (error.response?.data?.errors) {
         const apiErrors: Record<string, string> = {};
         Object.entries(error.response.data.errors).forEach(([key, value]) => {
@@ -51,7 +61,7 @@ export default function NewSellerPage() {
         });
         setErrors(apiErrors);
       } else {
-        toast.error(error.response?.data?.message || 'Une erreur est survenue');
+        toast.error(error.response?.data?.message || 'Une erreur est survenue lors de la création');
       }
     } finally {
       setLoading(false);
